@@ -13,6 +13,7 @@ SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
 
 void drawPoint(int x, int y){
+	SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	SDL_RenderDrawPoint(renderer,x,y);
 	SDL_RenderPresent(renderer);
 }
@@ -47,18 +48,21 @@ int main (int argc, char *argv[]) {
 
 	SDL_SetRenderDrawColor(renderer,0,0,0,255);
 	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
 
-	SDL_SetRenderDrawColor(renderer,255,255,255,255);
+	bool running = true;
+	SDL_Event event;
+
+	while(running){
+		while(SDL_PollEvent(&event)){
+			if(event.type == SDL_QUIT){
+				running = false;
+			}
+		}
 	
+		SDL_Delay(16);
+	}
 
-	
-	
-
-
-
-	SDL_Delay(5000);
-	
-
-
+	quitSDL();
 	return 0;
 }
