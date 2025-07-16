@@ -22,7 +22,7 @@ void loop() {
   servo.write(angle);
   distance = sr04.Distance();
 
-  jsonOutput = "{\"angle\":"+String(angle)+"\"distance\":"+String(distance)+"}";
+  jsonOutput = "{\"angle\":"+String(angle)+", \"distance\":"+String(distance)+"}";
 
   Serial.println(jsonOutput);
   
