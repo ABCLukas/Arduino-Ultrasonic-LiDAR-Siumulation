@@ -17,15 +17,15 @@ void deconstructJson(std::string buffer){
 
 	search_key = "\"angle\":";
 	int angle = buffer.find(search_key);
-	int angleRad = angle * M_PI / 180.0;
+	int angleRadiant = angle * M_PI / 180.0;
 	
 	for (size_t i = 0; i < measuredValues.size(); ++i) {
 		if (measuredValues[i][0] == -1 && measuredValues[i][1] == -1) {
-			measuredValues[pos][angleRad];
+			measuredValues[i][0]=pos;
+			measuredValues[i][1]=angleRadiant;
 		break;
 		}
 	}
-
 }
 
 int getX(std::array<int,2> arr){
