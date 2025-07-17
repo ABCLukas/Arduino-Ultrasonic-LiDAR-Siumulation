@@ -2,8 +2,8 @@
 #include <Servo.h>
 #include<Wire.h>
 
-#define trig 10
-#define echo 11
+#define trig 11
+#define echo 10
 
 uint16_t angle = 0;
 uint16_t distance = 0;
