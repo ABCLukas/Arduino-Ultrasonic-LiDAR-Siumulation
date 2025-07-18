@@ -7,43 +7,39 @@
 #include <array>
 #include <math.h>
 
-std::array<std::array<int,2>,255> measuredValues;//initialize and write to
+std::array<int,36> measuredValues;//initialize and write to
 
-void deconstructJson(std::string buffer){
-	std::array<int,2> point; // 0=distance, 1=angle
+void deconstructJson(std::string line){
 
-	std::string search_key = "\"distance\":";
-	int pos = buffer.find(search_key);
+	size_t commaPos = line.find(',');
+	if (commaPos == std::string::npos) return;
 
-	search_key = "\"angle\":";
-	int angle = buffer.find(search_key);
-	int angleRadiant = angle * M_PI / 180.0;
-	
-	for (size_t i = 0; i < measuredValues.size(); ++i) {
-		if (measuredValues[i][0] == -1 && measuredValues[i][1] == -1) {
-			measuredValues[i][0]=pos;
-			measuredValues[i][1]=angleRadiant;
-		break;
-		}
+	int angle = std::stoi(line.substr(0, commaPos));
+	int distance = std::stoi(line.substr(commaPos + 1));
+
+	if (angle >= -1 && angle < 36) {
+		measuredValues[(angle/10)]=distance;
 	}
 }
 
-int getX(std::array<int,2> arr){
-	return arr[0]* cos(arr[1]);
+int getX(int angle,int distance ){
+	double angleRadiant = angle * M_PI / 180.0;
+	return distance * cos(angleRadiant);
 }
 
-int getY(std::array<int,2> arr){
-	return arr[0]* sin(arr[1]);
+int getY(int angle,int distance){
+	double angleRadiant = angle * M_PI / 180.0;
+	return distance* sin(angleRadiant);
 }
 
-std::array<std::array<int,2>,255> getMeasuredValues(){
+std::array<int,36> getMeasuredValues(){
 	return measuredValues;
 }
 
 
 int main() {
-	for (auto& pair : measuredValues) {
-		pair = {-1, -1};
+	for (int i = 0; i<36;i++) {
+		measuredValues[i]=-1;	
 	}
 
 	const char* portname = "/dev/ttyACM0";//can vary
@@ -94,14 +90,16 @@ int main() {
 		if (n > 0) {
 			if (ch == '\n') {
 			buf[idx] = '\0';
-			//std::cout << "Received line: " << buf << std::endl;
-		
-			deconstructJson(buf);
-
-
+			std::cout << "Received line: " << buf << std::endl;
+				
+			//deconstructJson(buf);
 			idx = 0;
 		} else if (idx < sizeof(buf) - 1) {
 			buf[idx++] = ch;
+		}
+		//test
+		for(int i = 0; i<36;i++){
+			std::cout << i*10 << " - " << measuredValues[i] << std::endl;
 		}
 	} else if (n < 0) {
 		std::cerr << "Error reading: " << strerror(errno) << "\n";

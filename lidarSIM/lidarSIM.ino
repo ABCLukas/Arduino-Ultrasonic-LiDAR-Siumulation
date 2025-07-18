@@ -7,12 +7,12 @@
 
 uint16_t angle = 0;
 uint16_t distance = 0;
+uint16_t list[36];
 
-String jsonOutput = "";
+String output = "";
 
 Servo servo;
 Ultrasonic sr04(echo,trig);
-//SR04 sr04 = SR04(echo,trig);
 
 
 void setup() {
@@ -22,11 +22,12 @@ void setup() {
 
 void loop() {
   servo.write(angle);
+  delay(300);
   distance = sr04.read();
+  delay(16);
+  output = String(angle)+","+String(distance);
 
-  jsonOutput = "{\"angle\":"+String(angle)+", \"distance\":"+String(distance)+"}";
-
-  Serial.println(jsonOutput);
+  Serial.println(output);
   
   angle += 10;
   if(angle>=360){
