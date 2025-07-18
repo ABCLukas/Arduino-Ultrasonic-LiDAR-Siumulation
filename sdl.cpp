@@ -1,10 +1,12 @@
 //compile with:
+//g++ inputHandler.cpp Renderer.cpp main.cpp -o main $(sdl2-config --cflags --libs)
 //g++ sdl.cpp -lSDL2 -o sdl
 
 #include<SDL2/SDL.h>
 #include<iostream>
 #include<vector>
 #include<cmath>
+#include "Points.hpp"
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
@@ -12,9 +14,11 @@ const int HEIGHT = 480;
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
 
-void drawPoint(int x, int y){
+void renderPoint(){
 	SDL_SetRenderDrawColor(renderer,255,255,255,255);
-	SDL_RenderDrawPoint(renderer,x,y);
+	for(const auto& pt : scannedPoints){
+		SDL_RenderDrawPoint(renderer, pt.x,pt.y);
+	}
 	SDL_RenderPresent(renderer);
 }
 

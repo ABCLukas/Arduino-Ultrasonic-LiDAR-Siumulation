@@ -4,22 +4,13 @@
 #include <iostream>
 #include <string.h>
 #include <errno.h>
-#include <array>
 #include <math.h>
+#include "Points.hpp"
 
-std::array<int,36> measuredValues;//initialize and write to
+std::vector<Point> scannedPoints;
 
-void deconstructJson(std::string line){
-
-	size_t commaPos = line.find(',');
-	if (commaPos == std::string::npos) return;
-
-	int angle = std::stoi(line.substr(0, commaPos));
-	int distance = std::stoi(line.substr(commaPos + 1));
-
-	if (angle >= -1 && angle < 36) {
-		measuredValues[(angle/10)]=distance;
-	}
+void addPoint(int x, int y){
+	scannedPoints.push_back({x,y});
 }
 
 int getX(int angle,int distance ){
@@ -32,16 +23,18 @@ int getY(int angle,int distance){
 	return distance* sin(angleRadiant);
 }
 
-std::array<int,36> getMeasuredValues(){
-	return measuredValues;
+void deconstructLine(std::string line){
+
+	size_t commaPos = line.find(',');
+	if (commaPos == std::string::npos) return;
+
+	int angle = std::stoi(line.substr(0, commaPos));
+	int distance = std::stoi(line.substr(commaPos + 1));
+	
+	addPoint(getX(angle,distance),getY(angle,distance));
 }
 
-
-int main() {
-	for (int i = 0; i<36;i++) {
-		measuredValues[i]=-1;	
-	}
-
+int readSerialData() {
 	const char* portname = "/dev/ttyACM0";//can vary
 
 	int fd = open(portname, O_RDONLY | O_NOCTTY | O_SYNC);
@@ -79,32 +72,29 @@ int main() {
 		return 1;
 	}
 
-	char buf[256];
-	int idx = 0;
 
-	//std::cout << "Waiting for data...\n";
+	scannedPoints.clear();
+	std::string line;
+	char ch;
 
 	while (true) {
-		char ch;
+
 		int n = read(fd, &ch, 1);
 		if (n > 0) {
 			if (ch == '\n') {
-			buf[idx] = '\0';
-			std::cout << "Received line: " << buf << std::endl;
-				
-			//deconstructJson(buf);
-			idx = 0;
-		} else if (idx < sizeof(buf) - 1) {
-			buf[idx++] = ch;
-		}
-		//test
-		for(int i = 0; i<36;i++){
-			std::cout << i*10 << " - " << measuredValues[i] << std::endl;
+				if(!line.empty()){
+				std::cout << "Received line: " << line << std::endl;
+				deconstructLine(line);
+				} 
+		}else {
+			line+=ch;
 		}
 	} else if (n < 0) {
 		std::cerr << "Error reading: " << strerror(errno) << "\n";
 		break;
 		}
+
+	if(scannedPoints.size()>36) break;
 	}
 
 	close(fd);
