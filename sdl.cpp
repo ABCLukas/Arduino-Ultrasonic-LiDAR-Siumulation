@@ -28,7 +28,7 @@ void quitSDL(){
 	SDL_Quit();
 }
 
-int main (int argc, char *argv[]) {
+int startSDL (int argc, char *argv[]) {
 	if(SDL_Init(SDL_INIT_VIDEO)< 0){
 		std::cout<< "Video inilization ERROR:" << SDL_GetError() << std::endl;
 		return 1;
@@ -59,8 +59,10 @@ int main (int argc, char *argv[]) {
 
 	while(running){
 		while(SDL_PollEvent(&event)){
+			renderPoint();
 			if(event.type == SDL_QUIT){
 				running = false;
+				quitSDL();
 			}
 		}
 	
