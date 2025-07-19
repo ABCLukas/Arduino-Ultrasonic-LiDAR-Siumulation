@@ -83,9 +83,10 @@ int readSerialData() {
 		if (n > 0) {
 			if (ch == '\n') {
 				if(!line.empty()){
-				std::cout << "Received line: " << line << std::endl;
+				std::cout << "line: " << line << std::endl;
 				deconstructLine(line);
-				} 
+				line.clear();
+			} 
 		}else {
 			line+=ch;
 		}

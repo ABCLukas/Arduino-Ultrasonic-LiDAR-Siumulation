@@ -1,6 +1,5 @@
 //compile with:
 //g++ inputHandler.cpp Renderer.cpp main.cpp -o main $(sdl2-config --cflags --libs)
-//g++ sdl.cpp -lSDL2 -o sdl
 
 #include<SDL2/SDL.h>
 #include<iostream>
@@ -17,7 +16,8 @@ SDL_Renderer *renderer = nullptr;
 void renderPoint(){
 	SDL_SetRenderDrawColor(renderer,255,255,255,255);
 	for(const auto& pt : scannedPoints){
-		SDL_RenderDrawPoint(renderer, pt.x,pt.y);
+		std::cout <<" Point"<< pt.x << " " << pt.y << std::endl;
+		SDL_RenderDrawPoint(renderer, pt.x+WIDTH/2,pt.y+HEIGHT/2);
 	}
 	SDL_RenderPresent(renderer);
 }
@@ -56,10 +56,13 @@ int startSDL (int argc, char *argv[]) {
 
 	bool running = true;
 	SDL_Event event;
+	
 
+	renderPoint();
 	while(running){
+
+
 		while(SDL_PollEvent(&event)){
-			renderPoint();
 			if(event.type == SDL_QUIT){
 				running = false;
 				quitSDL();

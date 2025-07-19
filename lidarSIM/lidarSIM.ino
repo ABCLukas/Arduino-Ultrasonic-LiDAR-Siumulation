@@ -28,7 +28,7 @@ void loop() {
   output = String(angle)+","+String(distance);
 
   Serial.println(output);
-  
+  output="";
   angle += 10;
   if(angle>=360){
     angle=0;
