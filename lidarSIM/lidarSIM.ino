@@ -7,7 +7,6 @@
 
 uint16_t angle = 0;
 uint16_t distance = 0;
-uint16_t list[36];
 
 String output = "";
 
@@ -26,7 +25,6 @@ void loop() {
   distance = sr04.read();
   delay(16);
   output = String(angle)+","+String(distance);
-
   Serial.println(output);
   output="";
   angle += 10;

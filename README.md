@@ -4,4 +4,4 @@ This project simulates a 2D LiDAR system using SR04 ultrasonic sensors which is 
 
 The inspiration for this project came from seeing real-world LiDAR systems, witch work in a similar (but more advanced) way
 
-Thsi Project depends on Arduino core libaries
+This Project depends on Arduino core libaries
