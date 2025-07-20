@@ -55,4 +55,4 @@ This Project lays under the MIT licence for more information see [LICENCE](https
 
 ## Acknowledgments
 
-- Thanks to the creators of Arduino and the SR04 sensor.
+- Thanks to the creators of Arduino, the SR04 sensor and KiCad.
