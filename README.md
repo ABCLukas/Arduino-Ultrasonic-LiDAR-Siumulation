@@ -27,6 +27,11 @@ The inspiration for this project came from observing real-world LiDAR systems, w
     ```
 2. Open the Arduino sketch in the Arduino IDE.
 3. Install any required libraries using the Arduino Library Manager.
+4. Compile the c++ code
+```
+g++ inputHandler.cpp Renderer.cpp main.cpp -o main $(sdl2-config --cflags --libs)
+```
+5. Run and see The collected data
 
 ## Wiring Diagram
 
@@ -38,7 +43,7 @@ The inspiration for this project came from observing real-world LiDAR systems, w
 2. Connect the ultrasonic sensor and stepper motor as shown in the wiring diagram.
 3. Mount the sensor on the stepper motor.
 4. Open the Serial Monitor to see distance data output.
-5. Optionally, use a PC program/script to visualize the data.
+5. Use the C++ code to visualize the data.
 
 ## Contributing
 
