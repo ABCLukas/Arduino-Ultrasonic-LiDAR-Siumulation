@@ -10,7 +10,7 @@
 std::vector<Point> scannedPoints;
 
 void addPoint(int x, int y){
-	scannedPoints.push_back({x,y});
+	scannedPoints.emplace_back(Point{x,y});
 }
 
 int getX(int angle,int distance ){
@@ -74,6 +74,7 @@ int readSerialData() {
 
 
 	scannedPoints.clear();
+	scannedPoints.reserve(36);
 	std::string line;
 	char ch;
 
