@@ -7,6 +7,7 @@
 #include <math.h>
 #include "Points.hpp"
 
+//vector that saves the scanned Points
 std::vector<Point> scannedPoints;
 
 void addPoint(int x, int y){
@@ -23,6 +24,7 @@ int getY(int angle,int distance){
 	return distance* sin(angleRadiant);
 }
 
+//deconstruct given Line and add it to the vector
 void deconstructLine(std::string line){
 
 	size_t commaPos = line.find(',');
