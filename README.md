@@ -1,6 +1,6 @@
 # Arduino Ultrasonic-based LiDAR Simulation
 
-This project simulates a 2D LiDAR system using SR04 ultrasonic sensors mounted on a stepper motor. The system is controlled by an Arduino UNO (Elegoo R3) and scans the surroundings, sending distance data to a connected computer for visualization or processing.
+This project simulates a 2D LiDAR system using SR04 ultrasonic sensors mounted on a stepper motor. The system is controlled by an Arduino UNO (Elegoo R3) and scans the surroundings, sending distance data to a connected linux device for visualization or processing.
 
 ## Features
 
