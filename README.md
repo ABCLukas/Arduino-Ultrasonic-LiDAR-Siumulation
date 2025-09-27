@@ -35,7 +35,7 @@ g++ inputHandler.cpp Renderer.cpp main.cpp -o main $(sdl2-config --cflags --libs
 
 ## Wiring Diagram
 
-![schematic](https://github.com/ABCLukas/Arduino-Ultrasonic-LiDAR-Siumulation/blob/main/LiDAR.svg)
+![schematic](https://github.com/ABCLukas/Arduino-Ultrasonic-LiDAR-Siumulation/blob/main/LiDAR.png)
 
 ## Usage
 
