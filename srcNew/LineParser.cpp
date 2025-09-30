@@ -1,3 +1,4 @@
+#pragma once
 #include "LineParser.hpp"
 #include <cmath>
 #include <sys/types.h>

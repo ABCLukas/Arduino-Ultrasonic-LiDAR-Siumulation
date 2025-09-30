@@ -13,7 +13,7 @@
 Renderer::Renderer(u_int16_t width, u_int16_t height)
 : width_(width), height_(height), running_(true){
     if(SDL_Init(SDL_INIT_VIDEO)<0){
-        std::cout<<"Video initialisation error: " << SDL_GetError() <<std::endl;
+        std::cerr<<"Video initialisation error: " << SDL_GetError() <<std::endl;
         running_ = false;
     }
     //initialitze Window and Renderer
@@ -21,7 +21,7 @@ Renderer::Renderer(u_int16_t width, u_int16_t height)
     renderer_ = SDL_CreateRenderer(window_, -1,SDL_RENDERER_ACCELERATED); 
     //Check if Renderer and Window initilized right
     if(!window_ ||!renderer_){    
-        std::cout<<"SDL creation Error: " <<SDL_GetError() <<std::endl;
+        std::cerr<<"SDL creation Error: " <<SDL_GetError() <<std::endl;
         running_ = false;
     }
 }
