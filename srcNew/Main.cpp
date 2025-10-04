@@ -11,14 +11,13 @@ int main(int argc,char* argv[]){
     
     PointCloud pointcloud;
     Renderer renderer(cfg.windowWidth,cfg.windowHeight);
+    renderer.drawBackground();
 
     sr.openCon();
-
     sr.readPoints(pointcloud);
-    
-    renderer.drawBackground();
     renderer.renderPoints(pointcloud);
-    renderer.pollEvents();    
+
+    renderer.pollEvents();
 
     return 0;
 }

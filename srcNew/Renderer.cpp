@@ -6,6 +6,7 @@
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_events.h>
 #include <iostream>
+#include <ostream>
 #include <sys/types.h>
 #include <vector>
 
@@ -38,11 +39,6 @@ void Renderer::drawBackground(){
     SDL_SetRenderDrawColor(renderer_,99,99,99,255);
     SDL_RenderClear(renderer_);
 
-    //Draw Gridlines
-    for(u_int16_t i = 0;i>=width_/100;i++){
-        SDL_SetRenderDrawColor(renderer_,0,0,0, 255);
-        SDL_RenderDrawLine(renderer_,i,i,width_,height_);
-    }
     //Renders The Drawn Lines
     presentFrame();
 }
@@ -53,8 +49,10 @@ void Renderer::renderPoints(PointCloud &cloud){
 
     //Loops Thrugh the Point Cloud and Draws the containing Points to the Renderer
     std::vector<Point> c = cloud.getPoints();
+    std::cout << cloud.size() << std::endl;
     for(auto &pt: c){
        SDL_RenderDrawPoint(renderer_, (pt.x+width_/2),(pt.y+height_/2)); 
+       std::cout << "X:"<< pt.x << " Y: " << pt.y << std::endl;
     }
     presentFrame();
 }
@@ -78,9 +76,11 @@ bool Renderer::isRunning(){
 //Handels poll Events from SDL
 void Renderer::pollEvents(){
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if(event.type == SDL_QUIT){
-            running_ = false;
+    while(running_){
+        while (SDL_PollEvent(&event)) {
+            if(event.type == SDL_QUIT){
+                running_ = false;
+            }
         }
     }
 }
