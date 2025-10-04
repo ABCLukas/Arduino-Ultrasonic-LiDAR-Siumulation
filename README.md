@@ -6,7 +6,7 @@ This project simulates a 2D LiDAR system using SR04 ultrasonic sensors mounted o
 
 - 2D Scanning of the environment using ultrasonic sensors
 - Stepper-controlled rotation for area coverage
-- Data transmission to a PC for visualization
+- Data transmission to a Linux Device for visualization
 
 The inspiration for this project came from observing real-world LiDAR systems, which operate in a similar (but more advanced) way.
 
