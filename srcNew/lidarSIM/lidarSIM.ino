@@ -6,7 +6,7 @@
 #define echo 5
 
 int angle = 10;
-int curAngle = 0;
+int curAngle = 1;
 uint16_t distance = 0;
 const int stepsPerRevolution = 2048;
 int direction = 1; //1 forward -1 backwards
@@ -40,7 +40,7 @@ void loop() {
   
   if(curAngle>=360 || curAngle <= 0.0){
     direction *= -1;
-    curAngle = constrain(curAngle, 0, 360);
+    curAngle = 1;
     delay(1000);
   }
 }
