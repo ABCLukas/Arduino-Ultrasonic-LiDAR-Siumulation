@@ -14,7 +14,7 @@ int main(int argc,char* argv[]){
     renderer.drawBackground();
 
     sr.openCon();
-    sr.readPoints(pointcloud);
+    sr.readPoints(pointcloud,cfg.scanresolution);
     renderer.renderPoints(pointcloud);
 
     renderer.pollEvents();

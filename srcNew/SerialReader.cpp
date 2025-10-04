@@ -65,7 +65,7 @@ bool SerialReader::isOpen(){
     return opened_;
 }
 
-void SerialReader::readPoints(PointCloud& Cloud){
+void SerialReader::readPoints(PointCloud& Cloud,int scanresolution){
     if(isOpen()){
         Cloud.clear();
         std::string line;

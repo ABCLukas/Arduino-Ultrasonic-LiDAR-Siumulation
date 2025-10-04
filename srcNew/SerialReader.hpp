@@ -17,7 +17,7 @@ class SerialReader{
         bool isOpen();
 
         //Reads, Parses and adds them to PointCloud
-        void readPoints(PointCloud& Cloud);
+        void readPoints(PointCloud& Cloud,int scanresolution);
 
     private:
         //file descriptor for serial port
