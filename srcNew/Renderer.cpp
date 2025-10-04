@@ -44,7 +44,7 @@ void Renderer::drawBackground(){
         SDL_RenderDrawLine(renderer_,i,i,width_,height_);
     }
     //Renders The Drawn Lines
-    SDL_RenderPresent(renderer_);
+    presentFrame();
 }
 
 //Draws The Scanned Points to the Renderer
@@ -56,7 +56,7 @@ void Renderer::renderPoints(PointCloud &cloud){
     for(auto &pt: c){
        SDL_RenderDrawPoint(renderer_, (pt.x+width_/2),(pt.y+height_/2)); 
     }
-    SDL_RenderPresent(renderer_);
+    presentFrame();
 }
 
 //Presents The Render

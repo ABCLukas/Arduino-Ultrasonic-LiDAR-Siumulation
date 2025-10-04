@@ -1,4 +1,3 @@
-#pragma once
 #include "LineParser.hpp"
 #include <cmath>
 #include <sys/types.h>
@@ -9,16 +8,13 @@ Point LineParser::parse(std::string input){
 
 	int angle = std::stoi(input.substr(0, commaPos));
 	int distance = std::stoi(input.substr(commaPos + 1));
-	
-	return Point{getX(angle,distance),getY(angle,distance)};
-}
 
-int getX(int angle,int distance ){
+	//Gets The Y Position
 	double angleRadiant = angle * M_PI / 180.0;
-	return distance * cos(angleRadiant);
-}
+	u_int16_t x=  distance* sin(angleRadiant);
 
-int getY(int angle,int distance){
-	double angleRadiant = angle * M_PI / 180.0;
-	return distance* sin(angleRadiant);
+	//Gets The X Position
+	u_int16_t y =  distance * cos(angleRadiant);
+
+	return Point{x,y};
 }

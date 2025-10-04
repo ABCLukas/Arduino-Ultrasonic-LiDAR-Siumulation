@@ -1,4 +1,5 @@
 #include "SerialReader.hpp"
+#include "LineParser.hpp"
 #include <cerrno>
 #include <cstring>
 #include <fcntl.h>
@@ -6,7 +7,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-SerialReader::SerialReader(const char portName,int baudrate) 
+SerialReader::SerialReader(const char* portName,int baudrate) 
     : portName_(portName),baudrate_(baudrate){
 
 };
@@ -14,7 +15,7 @@ SerialReader::SerialReader(const char portName,int baudrate)
 bool SerialReader::openCon(){
     opened_=true;
 
-    fd_ = open(&portName_,O_RDONLY | O_NOCTTY | O_SYNC);
+    fd_ = open(portName_,O_RDONLY | O_NOCTTY | O_SYNC);
 
     if(fd_ < 0){
         std::cerr << "Error Opening" << portName_ << ": " << strerror(errno) << "\n"; 

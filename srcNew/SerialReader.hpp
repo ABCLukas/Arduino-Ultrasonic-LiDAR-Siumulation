@@ -1,11 +1,11 @@
 #pragma once
 
-#include "LineParser.hpp"
+#include "PointCloud.hpp"
 
 class SerialReader{
     public:
         //Constructor
-        SerialReader(const char portName,int baudrate);
+        SerialReader(const char* portName,int baudrate);
 
         //Opens Serial connection, return false if fails
         bool openCon();
@@ -19,13 +19,10 @@ class SerialReader{
         //Reads, Parses and adds them to PointCloud
         void readPoints(PointCloud& Cloud);
 
-        //Deconstructor
-        ~SerialReader();
-
     private:
         //file descriptor for serial port
         int fd_;
         bool opened_;    
-        char portName_;
+        const char* portName_;
         int baudrate_;
 };
