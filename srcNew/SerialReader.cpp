@@ -85,7 +85,7 @@ void SerialReader::readPoints(PointCloud& Cloud,int scanresolution){
     		break;
     	}
 
-	    if(Cloud.size()>5) break;
+	    if(Cloud.size()>=scanresolution) break;
 	}
         
     }else{
