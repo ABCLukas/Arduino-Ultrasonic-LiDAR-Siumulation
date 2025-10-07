@@ -1,4 +1,5 @@
 #include <avr/interrupt.h>
+#include <math.h>
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdio.h>
@@ -6,16 +7,16 @@
 #include <stdint.h>
 
 //Setup Enviorment
-#define FCPU 16000000UL
+#define F_CPU 16000000UL
 #define BAUD 9600
 #define UBRRVALUE (F_CPU/16/BAUD - 1) //UBR value for baud rate
 
 //CORECT PINS!!!
 //Stepper Motor Pins
-#define IN1PIN PB0
-#define IN2PIN PB1
-#define IN3PIN PB2
-#define IN4PIN PB3
+#define IN1PIN PB3
+#define IN2PIN PB2
+#define IN3PIN PB1
+#define IN4PIN PB0
 
 //Stepper Motor Ports and Variables
 #define STEPPORT PORTB
@@ -33,7 +34,7 @@ volatile uint8_t captureState = 0;
 
 //Setup Timeout Variables
 volatile uint8_t timeoutFlag = 0;
-volatile uint8_t timer0OuverflowCount = 0;
+volatile uint8_t timer0OverflowCount = 0;
 
 //Datatype to transmit throug Serial
 typedef struct {
@@ -71,7 +72,7 @@ void moveStepper(int16_t steps) {
     //Keep track of the current position in the 4-step sequence
     static int8_t sequenceIndex = 0; 
 
-    for (int16_t i = 0; i < num_steps; i++) {
+    for (int16_t i = 0; i < numSteps; i++) {
         
         sequenceIndex += direction;
         
@@ -82,15 +83,15 @@ void moveStepper(int16_t steps) {
             sequenceIndex = 3;
         }
 
-        STEPPORT &= ~((1 << IN1_PIN) | (1 << IN2_PIN) | (1 << IN3_PIN) | (1 << IN4_PIN));
+        STEPPORT &= ~((1 << IN1PIN) | (1 << IN2PIN) | (1 << IN3PIN) | (1 << IN4PIN));
         
-        STEPPORT |= wave_steps[sequenceIndex];
+        STEPPORT |= waveSteps[sequenceIndex];
         
-        _delay_us(STEP_DELAY_US);
+        _delay_us(STEPDELAYUS);
     }
     
     //turn of to reduce Heat
-    STEPPORT &= ~((1 << IN1_PIN) | (1 << IN2_PIN) | (1 << IN3_PIN) | (1 << IN4_PIN));
+    STEPPORT &= ~((1 << IN1PIN) | (1 << IN2PIN) | (1 << IN3PIN) | (1 << IN4PIN));
 }
 
 void usartInit() {
@@ -122,7 +123,7 @@ void usartTransmitBinary(void *data, size_t size) {
 void triggerUltrasonic(){
     captureState = 0; //Define capture
     timeoutFlag = 0;
-    timer0OuverflowCount = 0;
+    timer0OverflowCount = 0;
     TCNT1 = 0; //Reset timer 1
     TCNT0 = 0; //Reset timer 0
 
@@ -130,17 +131,17 @@ void triggerUltrasonic(){
     TCCR0B = (1 << CS02) | (1 << CS00); //Set Prescaler to 1024
     TIMSK0 |= (1 << TOIE0); //Enable Timer 0 overflow interupt
 
-    PORTD |= (1 << TRIG_PIN); //Enable Trigger
+    PORTD |= (1 << TRIGPIN); //Enable Trigger
     _delay_us(10); //Wait 10mili seconds
-    PORTD &= ~(1 << TRIG_PIN); //Disable Trigger
+    PORTD &= ~(1 << TRIGPIN); //Disable Trigger
 }
 
 __attribute__((weak)) ISR(TIMER0_OVF_vect){
-    timer0OuverflowCount++;
+    timer0OverflowCount++;
 
     //2 overfows ~33ms
     //256 ticks/ovf * 1024 prescaler / 16MHz = 16.384ms per overflow 
-    if(timer0OuverflowCount>=2){
+    if(timer0OverflowCount>=2){
         timeoutFlag=1;
 
         TCCR0B = 0;
@@ -165,9 +166,9 @@ ISR(TIMER1_CAPT_vect) {
     }
 }
 void ultrasonicInit(){
-    DDRD |= (1 << TRIG_PIN); //Set TRIG as Output
-    DDRB &= ~(1 << ECHO_PIN); //Set ECHO as Input
-    PORTD &= ~(1 << TRIG_PIN);
+    DDRD |= (1 << TRIGPIN); //Set TRIG as Output
+    DDRD &= ~(1 << ECHOPIN); //Set ECHO as Input
+    PORTD &= ~(1 << TRIGPIN);
 
     TCCR1A = 0;//not used for PWM
     TCCR1B = (1 << ICNC1) | //Enable Noise Canceler
@@ -188,15 +189,28 @@ int main (void){
     //initialize Code
     ultrasonicInit();
     usartInit();
+    stepperInit();
+
     DataPacket_t dataOut;
     int8_t direction = 1;
-    uint16_t deg = 0; //Variable that saves degrees 
+    uint16_t currentAngle = 0; //Variable that saves degrees 
 
 while(1){
-    direction = (deg>360) ? -1: 1;
-    moveStepper((11.377*deg*direction));
-    deg += 5;
-    _delay_ms(1000);
+    if (currentAngle >= 360) {
+            currentAngle = 360; 
+            direction = -1; 
+    } else if (currentAngle <= 0) {
+            currentAngle = 0; 
+            direction = 1; 
+    }
+
+    int16_t stepsToMove = (int16_t)round((float)5 * 11.3777);
+
+    moveStepper(stepsToMove * direction);
+    currentAngle += (5 * direction);
+        
+    _delay_ms(50); 
+        
     triggerUltrasonic();
 
     while(captureState != 2 && timeoutFlag == 0){}//add timeout
@@ -210,8 +224,8 @@ while(1){
         //Divide by 58
         float distanceCm = pulseDurationUs / 58.0;
 
-        dataOut.distance = distanceCm;
-        dataOut.angle = deg;
+        dataOut.distance = (uint16_t)distanceCm;
+        dataOut.angle = (uint16_t)currentAngle;
 
         }else{
             dataOut.distance = 0; //send 0 to Signal error
@@ -222,4 +236,5 @@ while(1){
 
         _delay_ms(100);
     }
+    return 0;
 }
