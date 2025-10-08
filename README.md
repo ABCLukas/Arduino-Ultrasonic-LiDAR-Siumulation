@@ -1,4 +1,4 @@
-# LiDAR-Simulationsplattform für Embedded Sensorik: C++ Prototyping
+# LiDAR simulation platform for embedded sensors: C++ prototyping
 
 This project simulates a 2D LiDAR system using SR04 ultrasonic sensors mounted on a stepper motor. The system interacts with the Sensors through a Arduino UNO R3 and scans the surroundings, sending distance data to a connected linux device for visualization and processing.
 
