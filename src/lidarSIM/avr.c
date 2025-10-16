@@ -11,7 +11,6 @@
 #define BAUD 9600
 #define UBRRVALUE (F_CPU/16/BAUD - 1) //UBR value for baud rate
 
-//CORECT PINS!!!
 //Stepper Motor Pins
 #define IN1PIN PB3
 #define IN2PIN PB2
