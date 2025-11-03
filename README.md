@@ -20,7 +20,6 @@ The inspiration for this project came from observing real-world LiDAR systems, w
 - SR04 Ultrasonic sensor
 - Stepper motor
 - Arduino core Stepper Library
-- Erick Simões Ultrasonic Distance Library
 
 ### Installation
 
