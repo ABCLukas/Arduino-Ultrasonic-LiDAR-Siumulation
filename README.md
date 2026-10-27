@@ -46,8 +46,6 @@ Use the wiring diagram as a reference and verify the pin assignments against the
 
 ![LiDAR wiring diagram](images/LiDAR.png)
 
-> **Demo media:** Add a photo of the assembled hardware and/or a short GIF or video of the running scan here. Demo media is not included yet.
-
 ## Software Structure
 
 - `src/` – Linux-side C++ application
