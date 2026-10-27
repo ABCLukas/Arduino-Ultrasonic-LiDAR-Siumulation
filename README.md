@@ -1,62 +1,142 @@
-# LiDAR simulation platform for embedded sensors: C++ prototyping
+# Arduino Ultrasonic LiDAR Simulation
 
-This project simulates a 2D LiDAR system using SR04 ultrasonic sensors mounted on a stepper motor. The system interacts with the Sensors through a Arduino UNO R3 and scans the surroundings, sending distance data to a connected linux device for visualization and processing.
+A simulated 2D LiDAR system using an Arduino UNO R3, an SR04 ultrasonic sensor and a stepper motor.
 
-This Project focusses on resource-light C++ on embedded Linux systems
+The project combines embedded hardware with a C++ application running on a Linux device. The Arduino performs the scan and transmits measurement data over a serial connection. The C++ application parses the measurements, builds a point cloud and visualizes the result using SDL2.
+
+> **Portfolio project:** This repository demonstrates embedded C++, serial communication, CMake-based builds and real-time visualization.
 
 ## Project Overview
 
-- 2D Scanning of the environment using ultrasonic sensors
+- 2D scanning of the environment using an ultrasonic sensor
 - Stepper-controlled rotation for area coverage
-- Data transmission to a Linux Device for visualization
+- Serial data transmission from the Arduino to a Linux computer
+- C++ parsing and point-cloud generation
+- SDL2-based visualization of the collected points
 
-The inspiration for this project came from observing real-world LiDAR systems, which operate in a similar (but more advanced) way.
+## System Architecture
 
-## Getting Started
+```text
+SR04 ultrasonic sensor
+          ↓
+Arduino UNO + stepper motor
+          ↓  serial measurement data
+C++ serial reader
+          ↓
+Line parser and point cloud
+          ↓
+SDL2 renderer
+```
 
-### Requirements
+The Arduino is responsible for controlling the sensor and the stepper motor. The Linux application receives the scan data, converts distance and angle measurements into points and renders the resulting scan.
+
+## Hardware
+
+The project is designed for the following components:
 
 - Arduino UNO R3
-- SR04 Ultrasonic sensor
+- SR04 ultrasonic sensor
 - Stepper motor
-- Arduino core Stepper Library
+- Appropriate motor driver and power supply
+- USB connection between the Arduino and the Linux device
 
-### Installation
+The sensor should be mounted on the stepper motor so that the motor can rotate the sensor while measurements are collected.
 
-1. Clone this repository:
-    ```
-    git clone https://github.com/ABCLukas/Arduino-Ultrasonic-LiDAR-Siumulation.git
-    ```
-1. Open the Arduino sketch in the Arduino IDE.
-1. Compile the C++ code with cmake:
-    ```
-    mkdir build && cd build
-    cmake ../src
-    make
-    ```
-1. Run and see the collected data
+Use the wiring diagram as a reference and verify the pin assignments against the firmware before connecting the hardware.
 
-### How To Setup
+![LiDAR wiring diagram](images/LiDAR.png)
 
-1. Upload the code to your Arduino UNO.
-1. Connect the ultrasonic sensor and stepper motor as shown in the wiring diagram.
-1. Mount the sensor on the stepper motor.
-1. Use the C++ code to visualize the data.
+> **Demo media:** Add a photo of the assembled hardware and/or a short GIF or video of the running scan here. Demo media is not included yet.
 
+## Software Structure
 
+- `src/` – Linux-side C++ application
+- `src/SerialReader.*` – serial-port communication
+- `src/LineParser.*` – parsing of incoming measurement lines
+- `src/PointCloud.*` – storage of calculated scan points
+- `src/Renderer.*` – SDL2 visualization
+- `tests/` – unit-test sources
+- `images/` – hardware and wiring documentation
 
-## Wiring Diagram
+## Requirements
 
-![schematic](https://github.com/ABCLukas/Arduino-Ultrasonic-LiDAR-Siumulation/blob/main/images/LiDAR.png)
+### Hardware
+
+- Arduino UNO R3
+- SR04 ultrasonic sensor
+- Stepper motor and suitable driver
+
+### Linux Application
+
+- Linux
+- C++17 compiler
+- CMake 3.10 or newer
+- SDL2 development libraries
+
+On Ubuntu or Debian, install the native build dependencies with:
+
+```bash
+sudo apt update
+sudo apt install build-essential cmake libsdl2-dev
+```
+
+## Build and Run
+
+### 1. Arduino Firmware
+
+Open the Arduino firmware sketch in the Arduino IDE, select the correct board and serial port, and upload the firmware to the Arduino UNO.
+
+Connect the ultrasonic sensor and stepper motor according to the wiring diagram and the firmware configuration.
+
+### 2. Linux Application
+
+From the repository root, configure and build the C++ application:
+
+```bash
+mkdir -p build
+cmake -S src -B build
+cmake --build build
+```
+
+Connect the Arduino and configure the serial port in `src/Config.hpp` if necessary.
+
+Start the application with:
+
+```bash
+./build/LiDARSimulation
+```
+
+The application reads measurements from the Arduino and displays the generated scan in an SDL2 window.
+
+## Continuous Integration
+
+GitHub Actions verifies that the Linux application can be configured and compiled with CMake on every push and pull request.
+
+The workflow is located at:
+
+```text
+.github/workflows/ci.yml
+```
+
+## Limitations
+
+This is an experimental prototype rather than a production-grade LiDAR system.
+
+Ultrasonic sensors have lower accuracy and resolution than optical LiDAR systems. The scan quality depends on sensor placement, motor control, serial communication and the surrounding environment.
 
 ## Contributing
 
-Contributions are welcome! Please open issues or submit pull requests for improvements. 
+Contributions are welcome.
+
+Please open an issue or submit a pull request with a clear description of the proposed change.
 
 ## License
 
-This Project is covered under the MIT License for more information see [LICENCE](https://github.com/ABCLukas/Arduino-Ultrasonic-LiDAR-Siumulation/blob/main/LICENSE)
+This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-- Thanks to the creators of Arduino, the SR04 sensor and KiCad.
+- Arduino project
+- SR04 ultrasonic sensor ecosystem
+- SDL2 project
+- KiCad for the wiring diagram
